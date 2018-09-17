@@ -1,13 +1,19 @@
 #!/usr/bin/env python
 # coding=utf-8
+from os.path import abspath, dirname
 
 from sanic import Sanic
-from sanic.response import json
+from sanic.response import json, html
+from jinja2 import Environment, PackageLoader, select_autoescape
 
 from ProxyIP.database import RedisClient
 
 app = Sanic()
 redis_conn = RedisClient()
+env = Environment(
+    loader=PackageLoader('ProxyIP', 'templates'),
+    autoescape=select_autoescape(['html', 'xml'])
+)
 
 
 @app.route("/")
@@ -52,3 +58,11 @@ async def clear_proxies(request, score):
     if redis_conn.clear_proxies(score):
         return json({"Clear": "Successful"})
     return json({"Clear": "Score should >= 0 and <= 10"})
+
+
+@app.route("/analysis")
+async def analysis(request):
+    template = env.get_template('analysis.html')
+    data = [39, 20, 10, 8, 1, 3, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2,
+            3, 4, 5, 1, 2, 3, 4]
+    return html(template.render(existed_proxies=data,))

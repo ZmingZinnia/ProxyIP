@@ -4,3 +4,4 @@ schedule
 sanic
 pyquery
 requests
+Jinja2
