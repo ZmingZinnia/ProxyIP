@@ -78,4 +78,4 @@ except:
 
 ### License
 
-MIT [©chenjiandongx](https://github.com/chenjiandongx)
+MIT [©zming](https://github.com/zMingGit/ProxyIP)
