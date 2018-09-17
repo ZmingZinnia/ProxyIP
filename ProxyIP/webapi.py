@@ -63,6 +63,6 @@ async def clear_proxies(request, score):
 @app.route("/analysis")
 async def analysis(request):
     template = env.get_template('analysis.html')
-    data = [39, 20, 10, 8, 1, 3, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2,
-            3, 4, 5, 1, 2, 3, 4]
+    data = redis_conn.get_statistics()
+    data = [int(s) for s in data]
     return html(template.render(existed_proxies=data,))

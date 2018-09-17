@@ -23,6 +23,9 @@ def run_schedule():
     # Start valider
     schedule.every(VALIDATOR_RUN_CYCLE).minutes.do(validator.run)
 
+    # Start statistics
+    schedule.every(60).minutes.do(validator.statistics)
+
     while True:
         try:
             schedule.run_pending()

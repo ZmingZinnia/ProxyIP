@@ -73,5 +73,10 @@ class Validator:
                 loop.run_until_complete(asyncio.wait(tasks))
         logger.info("Validator resting...")
 
+    def statistics(self):
+        """
+        """
+        self.redis.update_statistics()
+
 
 validator = Validator()

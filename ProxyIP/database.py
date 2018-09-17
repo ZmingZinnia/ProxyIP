@@ -34,6 +34,7 @@ class RedisClient:
             max_connections=REDIS_MAX_CONNECTION,
         )
         self.redis = redis.Redis(connection_pool=conn_pool)
+        self.analysis_key = 'proxy_analysis'
 
     def add_proxy(self, proxy, score=INIT_SCORE):
         """
@@ -141,3 +142,19 @@ class RedisClient:
         return all proxyies
         """
         return self.redis.zrangebyscore(REDIS_KEY, MIN_SCORE, MAX_SCORE)
+
+    def update_statistics(self):
+        """
+        """
+        old_statistics = self.redis.get(self.analysis_key)
+        if not old_statistics:
+            old_statistics = '0' * 24
+        old_statistics = old_statistics[1:]
+        old_statistics += str(self.redis.count_all_proxies())
+        self.redis.set(self.analysis_key, old_statistics)
+
+    def get_statistics(self):
+        old_statistics = self.redis.get(self.analysis_key)
+        if not old_statistics:
+            old_statistics = '0' * 24
+        return old_statistics
