@@ -57,29 +57,6 @@ class Crawler:
                 for proxy in re.findall(pattern, html):
                     yield host.format(proxy)
 
-    @staticmethod
-    @collect_funcs
-    def crawl_xici():
-        """
-        xici proxy：http://www.xicidaili.com
-        """
-        url = "http://www.xicidaili.com/{}"
-
-        items = []
-        for page in range(1, 21):
-            items.append(("wt/{}".format(page), "http://{}:{}"))
-            items.append(("wn/{}".format(page), "https://{}:{}"))
-
-        for item in items:
-            proxy_type, host = item
-            html = requests(url.format(proxy_type))
-            if html:
-                doc = pyquery.PyQuery(html)
-                for proxy in doc("table tr").items():
-                    ip = proxy("td:nth-child(2)").text()
-                    port = proxy("td:nth-child(3)").text()
-                    if ip and port:
-                        yield host.format(ip, port)
 
     @staticmethod
     @collect_funcs
@@ -117,65 +94,6 @@ class Crawler:
                     ip = proxy("td:nth-child(1)").text()
                     port = proxy("td:nth-child(2)").text()
                     schema = proxy("td:nth-child(4)").text()
-                    if ip and port and schema:
-                        yield "{}://{}:{}".format(schema.lower(), ip, port)
-
-    @staticmethod
-    @collect_funcs
-    def crawl_data5u():
-        """
-        5u proxy：http://www.data5u.com/
-        """
-        url = "http://www.data5u.com/"
-
-        html = requests(url)
-        if html:
-            doc = pyquery.PyQuery(html)
-            for index, item in enumerate(doc("li ul").items()):
-                if index > 0:
-                    ip = item("span:nth-child(1)").text()
-                    port = item("span:nth-child(2)").text()
-                    schema = item("span:nth-child(4)").text()
-                    if ip and port and schema:
-                        yield "{}://{}:{}".format(schema, ip, port)
-
-    @staticmethod
-    @collect_funcs
-    def crawl_iphai():
-        """
-        iphai ：http://www.iphai.com
-        """
-        url = "http://www.iphai.com/free/{}"
-
-        items = ["ng", "np", "wg", "wp"]
-        for proxy_type in items:
-            html = requests(url.format(proxy_type))
-            if html:
-                doc = pyquery.PyQuery(html)
-                for item in doc(".table-bordered tr").items():
-                    ip = item("td:nth-child(1)").text()
-                    port = item("td:nth-child(2)").text()
-                    schema = item("td:nth-child(4)").text().split(",")[0]
-                    if ip and port and schema:
-                        yield "{}://{}:{}".format(schema.lower(), ip, port)
-
-    @staticmethod
-    @collect_funcs
-    def crawl_swei360():
-        """
-        360：http://www.swei360.com
-        """
-        url = "http://www.swei360.com/free/?stype={}"
-
-        items = [p for p in range(1, 5)]
-        for proxy_type in items:
-            html = requests(url.format(proxy_type))
-            if html:
-                doc = pyquery.PyQuery(html)
-                for item in doc(".table-bordered tr").items():
-                    ip = item("td:nth-child(1)").text()
-                    port = item("td:nth-child(2)").text()
-                    schema = item("td:nth-child(4)").text()
                     if ip and port and schema:
                         yield "{}://{}:{}".format(schema.lower(), ip, port)
 
