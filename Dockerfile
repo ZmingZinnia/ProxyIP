@@ -13,4 +13,4 @@ RUN ln -fs /usr/share/zoneinfo/America/New_York /etc/localtime & apt-get install
 
 RUN pip3 install -r "${CODEDIR}/requirements.txt"
 
-ENTRYPOINT ["tail", "-f", "/dev/null"]
+ENTRYPOINT ["python3", "client.py"]
