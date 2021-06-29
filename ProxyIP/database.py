@@ -47,8 +47,7 @@ class RedisClient:
         :param proxy
         :param score
         """
-        if not self.redis.zscore(REDIS_KEY, proxy):
-            self.redis.zadd(REDIS_KEY, proxy, score)
+        self.redis.zadd(REDIS_KEY, proxy, score)
 
     def reduce_proxy_score(self, proxy):
         """
